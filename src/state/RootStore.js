@@ -13,7 +13,11 @@ export default class RootStore {
   }
 
   get maxDollarLossPerTrade() {
-    return "2.00";
+    const amount = this.accountBalance * this.maxLossPerTrade;
+    const formatted = amount.toFixed(2);
+    return formatted;
   }
-  get howManyCoinsToBuy() {}
+  get howManyCoinsToBuy() {
+    return null;
+  }
 }
