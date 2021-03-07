@@ -10,6 +10,7 @@ export default class RootStore {
   }
   entryPrice = "";
   stopLossPrice = "";
+  takeProfitPrice = "";
   entryDate = "";
   symbols = [];
   symbol = null;

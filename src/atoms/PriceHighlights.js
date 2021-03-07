@@ -1,39 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import binance from "../state/binance";
+import InlineError from "./InlineError";
+import InlineLoading from "./InlineLoading";
+import useLivePrice from "../hooks/useLivePrice";
+import Paper from "@material-ui/core/Paper";
 
-const Container = styled.dl`
-  dt {
-    font-weight: bold;
-    display: inline-block;
+const Container = styled(Paper)`
+  display: flex;
+  padding: 0.4em 1em;
+  margin: 0 1em;
+  min-width: 16em;
+  justify-content: center;
+  .current {
+    font-size: 2em;
+    margin: 0 0.25em;
   }
-  dd {
-    color: #666;
-    display: inline-block;
-    margin-left: 0.5em;
-    margin-right: 1em;
+  .daily {
+    display: flex;
+    flex-direction: column;
+  }
+  .high {
+    color: green;
+  }
+  .low {
+    color: red;
   }
 `;
 
 const PriceHighlights = ({ symbol }) => {
-  // TODO: Custom hook that gives live updating price data?
-  const [priceInfo, setPriceInfo] = useState({});
-  useEffect(() => {
-    if (!symbol) return;
-    binance
-      .getPriceChangeStatistics(symbol)
-      .then((res) => setPriceInfo(res))
-      .catch(console.error);
-  }, [symbol]);
+  const { price, loading, error } = useLivePrice(symbol);
   if (!symbol) return null;
+  if (loading) {
+    return (
+      <Container>
+        <InlineLoading />
+      </Container>
+    );
+  }
+  if (error) {
+    return (
+      <Container>
+        <InlineError error={error} />
+      </Container>
+    );
+  }
   return (
     <Container>
-      <dt>High:</dt>
-      <dd>{priceInfo.highPrice}</dd>
-      <dt>Current:</dt>
-      <dd>{priceInfo.lastPrice}</dd>
-      <dt>Low:</dt>
-      <dd>{priceInfo.lowPrice}</dd>
+      <span className="current">{price.lastPrice}</span>
+      <div className="daily">
+        <span className="high">{price.highPrice}</span>
+        <span className="low">{price.lowPrice}</span>
+      </div>
     </Container>
   );
 };

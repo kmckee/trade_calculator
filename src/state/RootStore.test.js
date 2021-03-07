@@ -54,10 +54,5 @@ describe("RootStore", () => {
       subject.loadSymbols();
       expect(binance.getSymbols).toHaveBeenCalled();
     });
-    it("only loads them once", () => {
-      subject.loadSymbols();
-      subject.loadSymbols();
-      expect(binance.getSymbols).toHaveBeenCalledTimes(1);
-    });
   });
 });

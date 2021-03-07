@@ -12,7 +12,7 @@ const binance = {
   },
   getPriceChangeStatistics: (symbol) => {
     if (!symbol) {
-      throw new Error("Must specify a symbol.");
+      return Promise.reject("Must specify a symbol.");
     }
     return axios.get(`ticker/24hr?symbol=${symbol}`).then((res) => res.data);
   },

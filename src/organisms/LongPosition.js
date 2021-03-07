@@ -36,6 +36,25 @@ const LongPosition = () => {
         value={store.maxLossPerTrade}
         onChange={(e) => (store.maxLossPerTrade = e.target.value)}
       />
+      <TextField
+        label="Entry Price"
+        money
+        value={store.entryPrice}
+        onChange={(e) => (store.entryPrice = e.target.value)}
+      />
+      <TextField
+        label="Take Profit Price"
+        money
+        value={store.takeProfitPrice}
+        onChange={(e) => (store.takeProfitPrice = e.target.value)}
+      />
+      <TextField
+        label="Stop Loss Price"
+        money
+        value={store.stopLossPrice}
+        onChange={(e) => (store.stopLossPrice = e.target.value)}
+      />
+      <div>You should purchase {store.howManyCoinsToBuy} coins.</div>
       <Button primary>Add</Button>
     </Form>
   );
