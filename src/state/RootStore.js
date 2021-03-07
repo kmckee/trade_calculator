@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, action } from "mobx";
 
 export default class RootStore {
   accountBalance = "";
@@ -10,9 +10,14 @@ export default class RootStore {
   }
   entryPrice = "";
   stopLossPrice = "";
+  entryDate = "";
+  symbols = [];
+  symbol = null;
+  binance = null;
 
-  constructor() {
-    makeAutoObservable(this);
+  constructor(binance) {
+    this.binance = binance;
+    makeAutoObservable(this, { binance: false });
   }
 
   get errors() {
@@ -29,6 +34,18 @@ export default class RootStore {
     const amount = this.accountBalance * this.maxLossPerTrade;
     const formatted = Math.round(amount * 100) / 100;
     return formatted;
+  }
+
+  loadSymbols() {
+    this.binance.getSymbols().then(
+      action("fetchSuccess", (data) => {
+        console.log("data", data);
+        this.symbols = data;
+      }),
+      action("fetchError", (err) => {
+        console.error(err);
+      })
+    );
   }
 
   get howManyCoinsToBuy() {

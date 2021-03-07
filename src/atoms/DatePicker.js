@@ -7,8 +7,9 @@ const DatePicker = ({ onChange, ...rest }) => {
     <MuiDatePicker
       disableToolbar
       variant="inline"
+      inputVariant="outlined"
       format="MM/dd/yyyy"
-      onChange={action(onChange)}
+      onChange={action("updateDate", (date) => onChange(date))}
       {...rest}
     />
   );

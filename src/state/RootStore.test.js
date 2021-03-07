@@ -1,9 +1,12 @@
 import RootStore from "./RootStore";
 
 describe("RootStore", () => {
-  let subject;
+  let subject, binance;
   beforeEach(() => {
-    subject = new RootStore();
+    binance = {
+      getSymbols: jest.fn(() => Promise.resolve([{}, {}, {}])),
+    };
+    subject = new RootStore(binance);
   });
   it("defaults to longs", () => {
     expect(subject.side).toBe("Long");
@@ -34,7 +37,6 @@ describe("RootStore", () => {
   });
   describe("validations", () => {
     it("adds an error if long with an entry price less than stop loss price", () => {
-      subject.side = "Long";
       subject.entryPrice = 10;
       subject.stopLossPrice = 11;
       expect(subject.errors[0]).toBe(
@@ -42,10 +44,20 @@ describe("RootStore", () => {
       );
     });
     it("has no error if long with an entry price greater than stop loss price", () => {
-      subject.side = "Long";
       subject.entryPrice = 11;
       subject.stopLossPrice = 10;
       expect(subject.errors.length).toBe(0);
+    });
+  });
+  describe("loadSymbols", () => {
+    it("loads symbols", () => {
+      subject.loadSymbols();
+      expect(binance.getSymbols).toHaveBeenCalled();
+    });
+    it("only loads them once", () => {
+      subject.loadSymbols();
+      subject.loadSymbols();
+      expect(binance.getSymbols).toHaveBeenCalledTimes(1);
     });
   });
 });

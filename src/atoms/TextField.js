@@ -13,6 +13,7 @@ const TextField = ({
 }) => {
   return (
     <MuiTextField
+      variant="outlined"
       InputProps={{
         startAdornment: money ? (
           <InputAdornment position="start">$</InputAdornment>
@@ -22,7 +23,7 @@ const TextField = ({
         ) : null,
       }}
       type={money || percentage || number ? "number" : "text"}
-      onChange={action((e) => onChange(e))}
+      onChange={action("updateText", (e) => onChange(e))}
       {...rest}
     >
       {children}
